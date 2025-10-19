@@ -27,7 +27,7 @@ export default function FoodDetail() {
           row.c.forEach((cell, i) => {
             obj[cols[i]] = cell ? cell.v : null;
           });
-          obj.id = index + 1; // Sesuaikan dengan ID di spreadsheet
+          obj.id = index + 1;
           return obj;
         });
 
@@ -41,24 +41,21 @@ export default function FoodDetail() {
       });
   }, [id]);
 
-  // Fungsi untuk membersihkan dan memformat harga
   const formatPrice = (price) => {
     if (!price) return 0;
     
-    // Jika harga range, ambil harga terendah untuk perhitungan
     if (String(price).includes('-')) {
       const prices = String(price).match(/\d+/g);
-      return prices ? parseInt(prices[0]) * 1000 : 0; // Asumsi format RpX.000
+      return prices ? parseInt(prices[0]) * 1000 : 0;
     }
     
     const cleanPrice = String(price).replace(/[^\d]/g, '');
     return parseInt(cleanPrice) || 0;
   };
 
-  // Fungsi untuk menampilkan harga dengan format yang benar
   const displayPrice = (price) => {
     if (!price) return 'Rp 0';
-    return price; // Tampilkan langsung karena sudah diformat di spreadsheet
+    return price; 
   };
 
   const handleOrder = () => {
@@ -70,7 +67,7 @@ export default function FoodDetail() {
     const message = `Assalamu'alaikum, saya ingin memesan:\n\n📦 *${product.name}*\n💰 Harga: ${displayPrice(product.price)}\n📦 Jumlah: ${quantity}\n💵 Total: Rp ${totalPrice.toLocaleString('id-ID')}\n\nTerima kasih!`;
     
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/6281234567890?text=${encodedMessage}`;
+    const whatsappUrl = `https://wa.me/6285814567851?text=${encodedMessage}`;
     
     window.open(whatsappUrl, '_blank');
   };
@@ -169,7 +166,7 @@ export default function FoodDetail() {
           className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden max-w-6xl mx-auto border border-white/50"
         >
           <div className="lg:flex">
-            <div className="lg:w-1/2 relative">
+            <div className="lg:w-130 lg:h-150 relative">
               <img 
                 src={product.image_url} 
                 alt={product.name}
