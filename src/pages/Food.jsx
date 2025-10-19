@@ -4,7 +4,9 @@ import InfiniteScrollProducts from "../components/InfiniteScrollProducts";
 
 export default function Food() {
     const [data, setData] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [selectedCategory, setSelectedCategory] = useState("Semua");
 
     useEffect(() => {
         const url = "https://docs.google.com/spreadsheets/d/1UInGlaN35dfSFGEwD3d5KC0eJmbFyMXXRbzpmXuflbw/gviz/tq?tqx=out:json";
@@ -24,11 +26,12 @@ export default function Food() {
                     row.c.forEach((cell, i) => {
                         obj[cols[i]] = cell ? cell.v : null;
                     });
-                    obj.id = index;
+                    obj.id = index + 1;
                     return obj;
                 });
 
                 setData(rows);
+                setFilteredData(rows);
                 setLoading(false);
             })
             .catch(err => {
@@ -36,6 +39,19 @@ export default function Food() {
                 setLoading(false);
             });
     }, []);
+
+    // Get unique categories from data
+    const categories = ["Semua", ...new Set(data.map(item => item.category).filter(Boolean))];
+
+    const handleCategoryFilter = (category) => {
+        setSelectedCategory(category);
+        if (category === "Semua") {
+            setFilteredData(data);
+        } else {
+            const filtered = data.filter(item => item.category === category);
+            setFilteredData(filtered);
+        }
+    };
 
     if (loading) {
         return (
@@ -160,7 +176,6 @@ export default function Food() {
                 </motion.div>
             </motion.header>
 
-
             {/* Products Section */}
             <section id="produk" className="py-8 px-4">
                 <motion.div
@@ -175,25 +190,91 @@ export default function Food() {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             transition={{ delay: 0.4 }}
-                            className="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-md mb-4"
+                            className="inline-flex items-center gap-3 bg-white px-6 py-3 rounded-full shadow-md mb-6"
                         >
                             <h2 className="text-3xl font-bold text-green-800">
                                 Menu Kami
                             </h2>
                         </motion.div>
 
-                        <motion.p
+                        <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.6 }}
-                            className="text-gray-600 text-lg"
+                            className="flex flex-wrap justify-center gap-3 mb-8 px-4"
                         >
-                            Geser untuk melihat lebih banyak menu ↓
-                        </motion.p>
+                            {categories.map((category, index) => (
+                                <motion.button
+                                    key={category}
+                                    initial={{ opacity: 0, scale: 0.8 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ delay: 0.8 + index * 0.1 }}
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                    onClick={() => handleCategoryFilter(category)}
+                                    className={`px-6 py-3 rounded-full font-semibold text-sm md:text-base transition-all duration-300 shadow-md border-2 ${selectedCategory === category
+                                            ? "bg-gradient-to-r from-green-600 to-emerald-600 text-white border-green-700 shadow-lg"
+                                            : "bg-white text-green-700 border-green-200 hover:bg-green-50 hover:border-green-300"
+                                        }`}
+                                >
+                                    {category === "Semua" ? "🍽️ Semua Menu" :
+                                        category === "makanan" ? "🍚 Makanan" :
+                                            category === "snack berat" ? "🍱 Snack Berat" :
+                                                category === "snack ringan" ? "🍪 Snack Ringan" : category}
+                                </motion.button>
+                            ))}
+                        </motion.div>
+
+                        {/* Selected Category Info */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 1 }}
+                            className="text-center mb-6"
+                        >
+                            <motion.p
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 1.2 }}
+                                className="text-gray-500 text-xl"
+                            >
+                                Geser kesamping untuk melihat lebih banyak menu ↓
+                            </motion.p>
+                        </motion.div>
                     </div>
 
                     {/* Infinite Scroll Container */}
-                    <InfiniteScrollProducts products={data} />
+                    {filteredData.length > 0 ? (
+                        <InfiniteScrollProducts products={filteredData} />
+                    ) : (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-center py-12"
+                        >
+                            <motion.div
+                                animate={{ scale: [1, 1.1, 1] }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                                className="text-6xl mb-4"
+                            >
+                                😔
+                            </motion.div>
+                            <h3 className="text-2xl font-bold text-green-800 mb-2">
+                                Tidak ada produk dalam kategori ini
+                            </h3>
+                            <p className="text-gray-600 mb-6">
+                                Coba pilih kategori lain untuk melihat menu yang tersedia
+                            </p>
+                            <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                onClick={() => handleCategoryFilter("Semua")}
+                                className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-8 py-3 rounded-xl font-semibold shadow-lg"
+                            >
+                                Tampilkan Semua Menu
+                            </motion.button>
+                        </motion.div>
+                    )}
                 </motion.div>
             </section>
 
@@ -205,7 +286,7 @@ export default function Food() {
                 className="bg-green-800 text-white text-center py-8 mt-12"
             >
                 <div className="container mx-auto px-4">
-                    <p className="text-lg font-semibold mb-2">&copy;RADAR SMKN10</p>
+                    <p className="text-lg font-semibold mb-2">&copy; RADAR SMKN10</p>
                 </div>
             </motion.footer>
         </div>

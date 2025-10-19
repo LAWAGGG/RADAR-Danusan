@@ -2,6 +2,21 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 export default function ProductCard({ product, index }) {
+  // Fungsi untuk membersihkan dan memformat harga
+  const formatPrice = (price) => {
+    if (!price) return 'Rp 0';
+    
+    // Jika harga mengandung range (contoh: "Rp7.000 - Rp2.000")
+    if (String(price).includes('-')) {
+      return price; // Tampilkan langsung jika range
+    }
+    
+    // Hapus karakter non-digit dan format
+    const cleanPrice = String(price).replace(/[^\d]/g, '');
+    const numericPrice = parseInt(cleanPrice) || 0;
+    return `Rp ${numericPrice.toLocaleString('id-ID')}`;
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 50 }}
@@ -9,7 +24,7 @@ export default function ProductCard({ product, index }) {
       whileHover={{ 
         scale: 1.05,
         y: -5,
-        transition: { duration: 0.001 }
+        transition: { duration: 0.3 }
       }}
       className="bg-white rounded-2xl shadow-lg overflow-hidden min-w-[300px] mx-2 flex-shrink-0 border-2 border-transparent hover:border-green-300 transition-all duration-300"
     >
@@ -19,19 +34,23 @@ export default function ProductCard({ product, index }) {
           alt={product.name}
           className="w-full h-48 object-cover"
           onError={(e) => {
-            e.target.src = 'https://via.placeholder.com/300x200/4ADE80/FFFFFF?text=No+Image';
+            e.target.src = `https://via.placeholder.com/300x200/4ADE80/FFFFFF?text=${encodeURIComponent(product.name)}`;
           }}
         />
         <div className="absolute top-2 right-2 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-          {product.category}
+          {product.category || 'Makanan'}
         </div>
       </div>
       
-      <div className="p-5">
-        <h3 className="font-bold text-xl text-gray-800 mb-2 line-clamp-1">{product.name}</h3>
+      <div className="p-3">
+        <h3 className="font-bold text-xl text-gray-800 mb-2 line-clamp-2 min-h-[3.5rem]">
+          {product.name}
+        </h3>
         <div className="flex justify-between items-center">
           <div>
-            <span className="text-green-700 font-bold text-xl">{product.price}</span>
+            <span className="text-green-700 font-bold text-lg">
+              {formatPrice(product.price)}
+            </span>
           </div>
           <Link to={`/product/${product.id}`}>
             <motion.button

@@ -27,7 +27,7 @@ export default function FoodDetail() {
           row.c.forEach((cell, i) => {
             obj[cols[i]] = cell ? cell.v : null;
           });
-          obj.id = index;
+          obj.id = index + 1; // Sesuaikan dengan ID di spreadsheet
           return obj;
         });
 
@@ -41,11 +41,24 @@ export default function FoodDetail() {
       });
   }, [id]);
 
+  // Fungsi untuk membersihkan dan memformat harga
   const formatPrice = (price) => {
     if (!price) return 0;
     
+    // Jika harga range, ambil harga terendah untuk perhitungan
+    if (String(price).includes('-')) {
+      const prices = String(price).match(/\d+/g);
+      return prices ? parseInt(prices[0]) * 1000 : 0; // Asumsi format RpX.000
+    }
+    
     const cleanPrice = String(price).replace(/[^\d]/g, '');
     return parseInt(cleanPrice) || 0;
+  };
+
+  // Fungsi untuk menampilkan harga dengan format yang benar
+  const displayPrice = (price) => {
+    if (!price) return 'Rp 0';
+    return price; // Tampilkan langsung karena sudah diformat di spreadsheet
   };
 
   const handleOrder = () => {
@@ -54,7 +67,7 @@ export default function FoodDetail() {
     const productPrice = formatPrice(product.price);
     const totalPrice = productPrice * quantity;
     
-    const message = `Assalamu'alaikum, saya ingin memesan:\n\n📦 *${product.name}*\n📦 Jumlah: ${quantity}\n💵 Total: Rp ${totalPrice.toLocaleString('id-ID')}\n\nTerima kasih!`;
+    const message = `Assalamu'alaikum, saya ingin memesan:\n\n📦 *${product.name}*\n💰 Harga: ${displayPrice(product.price)}\n📦 Jumlah: ${quantity}\n💵 Total: Rp ${totalPrice.toLocaleString('id-ID')}\n\nTerima kasih!`;
     
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/6281234567890?text=${encodedMessage}`;
@@ -83,7 +96,8 @@ export default function FoodDetail() {
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center relative overflow-hidden">       <motion.div
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 flex items-center justify-center relative overflow-hidden">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-center bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl"
@@ -157,11 +171,11 @@ export default function FoodDetail() {
           <div className="lg:flex">
             <div className="lg:w-1/2 relative">
               <img 
-                src={product.image_url || '/api/placeholder/600/600'} 
+                src={product.image_url} 
                 alt={product.name}
                 className="w-full h-80 lg:h-full object-cover"
                 onError={(e) => {
-                  e.target.src = `https://via.placeholder.com/600x600/4ade80/ffffff?text=${encodeURIComponent(product.name)}`;
+                  e.target.src = `https://via.placeholder.com/600x600/4ADE80/FFFFFF?text=${encodeURIComponent(product.name)}`;
                 }}
               />
               
@@ -184,7 +198,7 @@ export default function FoodDetail() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <h1 className="text-4xl lg:text-3xl font-bold text-gray-800 mb-4 leading-tight">
+                <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-4 leading-tight">
                   {product.name}
                 </h1>
                 
@@ -204,8 +218,8 @@ export default function FoodDetail() {
                   transition={{ delay: 0.6 }}
                   className="mb-6"
                 >
-                  <span className="text-xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                    Rp {productPrice.toLocaleString('id-ID')}
+                  <span className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                    {displayPrice(product.price)}
                   </span>
                 </motion.div>
                 
@@ -243,24 +257,27 @@ export default function FoodDetail() {
                   </div>
                 </motion.div>
                 
-                <motion.div 
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1 }}
-                  className="mb-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200 shadow-inner"
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="text-gray-700 font-semibold text-lg">Total Harga:</span>
-                    <motion.span 
-                      key={totalPrice}
-                      initial={{ scale: 1.1 }}
-                      animate={{ scale: 1 }}
-                      className="text-lg font-bold text-green-700"
-                    >
-                      Rp {totalPrice.toLocaleString('id-ID')}
-                    </motion.span>
-                  </div>
-                </motion.div>
+                {/* Total Price - hanya tampil jika harga tidak range */}
+                {!String(product.price).includes('-') && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1 }}
+                    className="mb-8 p-6 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl border border-green-200 shadow-inner"
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-700 font-semibold text-lg">Total Harga:</span>
+                      <motion.span 
+                        key={totalPrice}
+                        initial={{ scale: 1.1 }}
+                        animate={{ scale: 1 }}
+                        className="text-xl font-bold text-green-700"
+                      >
+                        Rp {totalPrice.toLocaleString('id-ID')}
+                      </motion.span>
+                    </div>
+                  </motion.div>
+                )}
                 
                 <motion.button
                   initial={{ opacity: 0, y: 20 }}
@@ -272,10 +289,21 @@ export default function FoodDetail() {
                   }}
                   whileTap={{ scale: 0.95 }}
                   onClick={handleOrder}
-                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-5 rounded-2xl font-bold text-xl flex items-center justify-center transition-all duration-300 shadow-2xl"
+                  className="w-full bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white py-4 rounded-2xl font-bold text-lg flex items-center justify-center transition-all duration-300 shadow-2xl"
                 >
-                  Pesan Sekarang!
+                  Pesan Sekarang via WhatsApp
                 </motion.button>
+
+                {String(product.price).includes('-') && (
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 1.4 }}
+                    className="text-center text-gray-500 mt-4 text-sm"
+                  >
+                    *Harga bervariasi, silakan konfirmasi via WhatsApp
+                  </motion.p>
+                )}
               </motion.div>
             </div>
           </div>
