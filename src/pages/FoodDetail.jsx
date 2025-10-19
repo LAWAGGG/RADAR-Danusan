@@ -64,7 +64,7 @@ export default function FoodDetail() {
     const productPrice = formatPrice(product.price);
     const totalPrice = productPrice * quantity;
     
-    const message = `Assalamu'alaikum, saya ingin memesan:\n\n📦 *${product.name}*\n💰 Harga: ${displayPrice(product.price)}\n📦 Jumlah: ${quantity}\n💵 Total: Rp ${totalPrice.toLocaleString('id-ID')}\n\nTerima kasih!`;
+    const message = `Assalamu'alaikum, saya \n nama:\nkelas:\n\n ingin memesan:\n\n🍗 *${product.name}*\n💰 Harga: ${displayPrice(product.price)}\n📦 Jumlah: ${quantity}\n💵 Total: Rp ${totalPrice.toLocaleString('id-ID')}\n\nTerima kasih!`;
     
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/6285814567851?text=${encodedMessage}`;
