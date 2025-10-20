@@ -2,16 +2,13 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 
 export default function ProductCard({ product, index }) {
-  // Fungsi untuk membersihkan dan memformat harga
   const formatPrice = (price) => {
     if (!price) return 'Rp 0';
     
-    // Jika harga mengandung range (contoh: "Rp7.000 - Rp2.000")
     if (String(price).includes('-')) {
-      return price; // Tampilkan langsung jika range
+      return price; 
     }
     
-    // Hapus karakter non-digit dan format
     const cleanPrice = String(price).replace(/[^\d]/g, '');
     const numericPrice = parseInt(cleanPrice) || 0;
     return `Rp ${numericPrice.toLocaleString('id-ID')}`;

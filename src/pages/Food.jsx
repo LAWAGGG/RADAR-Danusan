@@ -40,7 +40,6 @@ export default function Food() {
             });
     }, []);
 
-    // Get unique categories from data
     const categories = ["Semua", ...new Set(data.map(item => item.category).filter(Boolean))];
 
     const handleCategoryFilter = (category) => {
@@ -75,7 +74,6 @@ export default function Food() {
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100">
 
-            {/* Header Section */}
             <motion.header
                 initial={{ opacity: 0, y: -50 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -176,7 +174,6 @@ export default function Food() {
                 </motion.div>
             </motion.header>
 
-            {/* Products Section */}
             <section id="produk" className="py-8 px-4">
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -184,7 +181,6 @@ export default function Food() {
                     transition={{ delay: 0.5 }}
                     className="container mx-auto"
                 >
-                    {/* Section Header */}
                     <div className="text-center mb-12">
                         <motion.div
                             initial={{ scale: 0.9, opacity: 0 }}
@@ -225,7 +221,6 @@ export default function Food() {
                             ))}
                         </motion.div>
 
-                        {/* Selected Category Info */}
                         <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -243,7 +238,6 @@ export default function Food() {
                         </motion.div>
                     </div>
 
-                    {/* Infinite Scroll Container */}
                     {filteredData.length > 0 ? (
                         <InfiniteScrollProducts products={filteredData} />
                     ) : (
@@ -278,7 +272,6 @@ export default function Food() {
                 </motion.div>
             </section>
 
-            {/* Footer */}
             <motion.footer
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

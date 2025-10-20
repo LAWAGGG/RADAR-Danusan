@@ -176,7 +176,6 @@ export default function FoodDetail() {
                 }}
               />
               
-              {/* Category Badge */}
               <motion.div 
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -208,7 +207,6 @@ export default function FoodDetail() {
                   {product.description || 'Deskripsi produk sedang tidak tersedia.'}
                 </motion.p>
                 
-                {/* Price Display */}
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -254,7 +252,6 @@ export default function FoodDetail() {
                   </div>
                 </motion.div>
                 
-                {/* Total Price - hanya tampil jika harga tidak range */}
                 {!String(product.price).includes('-') && (
                   <motion.div 
                     initial={{ opacity: 0, y: 10 }}
