@@ -16,47 +16,42 @@ export default function ProductCard({ product, index }) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      whileHover={{ 
-        scale: 1.05,
-        y: -5,
-        transition: { duration: 0.3 }
-      }}
-      className="bg-white rounded-2xl shadow-lg overflow-hidden min-w-[300px] mx-2 flex-shrink-0 border-2 border-transparent hover:border-green-300 transition-all duration-300"
+      whileHover={{ scale: 1.02 }}
+      className="bg-white rounded-xl shadow-sm overflow-hidden min-w-[260px] mx-2 flex-shrink-0 border border-gray-100 hover:shadow-md transition-shadow duration-200"
     >
-      <div className="relative">
+      <div className="relative w-70">
         <img 
           src={product.image_url} 
           alt={product.name}
-          className="w-full h-48 object-cover"
+          className="w-full h-65 object-cover"
           onError={(e) => {
             e.target.src = `https://via.placeholder.com/300x200/4ADE80/FFFFFF?text=${encodeURIComponent(product.name)}`;
           }}
         />
-        <div className="absolute top-2 right-2 bg-green-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+        <div className="absolute top-2 right-2 bg-green-600 text-white px-2.5 py-0.5 rounded-md text-xs font-medium">
           {product.category || 'Makanan'}
         </div>
       </div>
-      
+
       <div className="p-3">
-        <h3 className="font-bold text-xl text-gray-800 mb-2 line-clamp-2 min-h-[3.5rem]">
+        <h3 className="font-semibold text-lg text-gray-800 mb-2 line-clamp-2 min-h-[3rem]">
           {product.name}
         </h3>
         <div className="flex justify-between items-center">
           <div>
-            <span className="text-green-700 font-bold text-lg">
+            <span className="text-green-700 font-semibold text-base">
               {formatPrice(product.price)}
             </span>
           </div>
           <Link to={`/product/${product.id}`}>
             <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold shadow-lg transition-all duration-300 flex items-center space-x-2"
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.98 }}
+              className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors duration-150"
             >
-              <span>🛒</span>
-              <span>Beli</span>
+              Beli
             </motion.button>
           </Link>
         </div>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { Footer } from "../components/Footer";
 
 export default function FoodDetail() {
   const { id } = useParams();
@@ -124,7 +125,7 @@ export default function FoodDetail() {
   const totalPrice = productPrice * quantity;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-emerald-100 relative overflow-hidden">      
+    <div className="min-h-screen relative overflow-hidden">      
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           className="absolute top-20 left-10 w-64 h-64 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-20"
@@ -303,6 +304,8 @@ export default function FoodDetail() {
           </div>
         </motion.div>
       </div>
+
+      <Footer></Footer>
     </div>
   );
 }
