@@ -197,7 +197,7 @@ export default function Food() {
             </section>
 
             {/* Products Section */}
-            <section id="produk" className="py-8 px-4">
+            <section id="products" className="py-8 px-4">
                 <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
