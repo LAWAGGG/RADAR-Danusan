@@ -44,19 +44,19 @@ export default function FoodDetail() {
 
   const formatPrice = (price) => {
     if (!price) return 0;
-    
+
     if (String(price).includes('-')) {
       const prices = String(price).match(/\d+/g);
       return prices ? parseInt(prices[0]) * 1000 : 0;
     }
-    
+
     const cleanPrice = String(price).replace(/[^\d]/g, '');
     return parseInt(cleanPrice) || 0;
   };
 
   const displayPrice = (price) => {
     if (!price) return 'Rp 0';
-    return price; 
+    return price;
   };
 
   const handleOrder = () => {
@@ -64,12 +64,12 @@ export default function FoodDetail() {
 
     const productPrice = formatPrice(product.price);
     const totalPrice = productPrice * quantity;
-    
+
     const message = `Assalamu'alaikum, saya \n nama:\nkelas:\n\n ingin memesan:\n\n🍗 *${product.name}*\n💰 Harga: ${displayPrice(product.price)}\n📦 Jumlah: ${quantity}\n💵 Total: Rp ${totalPrice.toLocaleString('id-ID')}\n\nTerima kasih!`;
-    
+
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/6285814567851?text=${encodedMessage}`;
-    
+
     window.open(whatsappUrl, '_blank');
   };
 
@@ -108,7 +108,7 @@ export default function FoodDetail() {
             😔
           </motion.div>
           <h2 className="text-2xl font-bold text-green-800 mb-4">Produk tidak ditemukan</h2>
-          <motion.button 
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigate('/')}
@@ -125,7 +125,7 @@ export default function FoodDetail() {
   const totalPrice = productPrice * quantity;
 
   return (
-    <div className="min-h-screen relative overflow-hidden">      
+    <div className="min-h-screen relative overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <motion.div
           className="absolute top-20 left-10 w-64 h-64 bg-green-200 rounded-full mix-blend-multiply filter blur-xl opacity-20"
@@ -148,10 +148,10 @@ export default function FoodDetail() {
           onClick={() => navigate('/')}
           className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm px-6 py-3 rounded-xl shadow-lg border border-green-100 text-green-700 hover:text-green-800 font-semibold transition-all duration-200"
         >
-          <motion.svg 
+          <motion.svg
             className="w-5 h-5"
-            fill="none" 
-            stroke="currentColor" 
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
             whileHover={{ x: -3 }}
           >
@@ -168,16 +168,16 @@ export default function FoodDetail() {
         >
           <div className="lg:flex">
             <div className="lg:w-130 lg:h-150 relative">
-              <img 
-                src={product.image_url} 
+              <img
+                src={product.image_url}
                 alt={product.name}
                 className="w-full h-80 lg:h-full object-cover"
                 onError={(e) => {
                   e.target.src = `https://via.placeholder.com/600x600/4ADE80/FFFFFF?text=${encodeURIComponent(product.name)}`;
                 }}
               />
-              
-              <motion.div 
+
+              <motion.div
                 initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 }}
@@ -188,7 +188,7 @@ export default function FoodDetail() {
                 </span>
               </motion.div>
             </div>
-            
+
             <div className="lg:w-1/2 p-8 lg:p-10">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -198,17 +198,8 @@ export default function FoodDetail() {
                 <h1 className="text-3xl lg:text-4xl font-bold text-gray-800 mb-4 leading-tight">
                   {product.name}
                 </h1>
-                
-                <motion.p 
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 0.4 }}
-                  className="text-gray-600 mb-6 leading-relaxed text-lg"
-                >
-                  {product.description || 'Deskripsi produk sedang tidak tersedia.'}
-                </motion.p>
-                
-                <motion.div 
+
+                <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.6 }}
@@ -218,8 +209,17 @@ export default function FoodDetail() {
                     {displayPrice(product.price)}
                   </span>
                 </motion.div>
-                
-                <motion.div 
+
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-gray-600 mb-6 leading-relaxed text-lg"
+                >
+                  {product.description || 'Deskripsi produk sedang tidak tersedia.'}
+                </motion.p>
+
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.8 }}
@@ -234,15 +234,15 @@ export default function FoodDetail() {
                     >
                       <span className="text-xl font-bold">-</span>
                     </motion.button>
-                    
-                    <motion.span 
+
+                    <motion.span
                       key={quantity}
                       animate={{ scale: 1 }}
                       className="text-2xl font-bold w-12 text-center bg-green-50 py-2 rounded-lg border border-green-200"
                     >
                       {quantity}
                     </motion.span>
-                    
+
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       onClick={() => setQuantity(quantity + 1)}
@@ -252,9 +252,9 @@ export default function FoodDetail() {
                     </motion.button>
                   </div>
                 </motion.div>
-                
+
                 {!String(product.price).includes('-') && (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 1 }}
@@ -262,7 +262,7 @@ export default function FoodDetail() {
                   >
                     <div className="flex justify-between items-center">
                       <span className="text-gray-700 font-semibold text-lg">Total Harga:</span>
-                      <motion.span 
+                      <motion.span
                         key={totalPrice}
                         initial={{ scale: 1.1 }}
                         animate={{ scale: 1 }}
@@ -273,12 +273,12 @@ export default function FoodDetail() {
                     </div>
                   </motion.div>
                 )}
-                
+
                 <motion.button
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1.2 }}
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.05,
                     boxShadow: "0 20px 40px rgba(5, 150, 105, 0.3)"
                   }}
