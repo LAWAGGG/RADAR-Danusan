@@ -160,7 +160,7 @@ export default function Food() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.6, delay: 0.4 }}
                             onClick={() => {
-                                document.getElementById('produk')?.scrollIntoView({
+                                document.getElementById('products')?.scrollIntoView({
                                     behavior: 'smooth',
                                     block: 'start'
                                 });
@@ -184,7 +184,6 @@ export default function Food() {
                     </div>
                 </div>
 
-                {/* Wave Divider */}
                 <div className="absolute bottom-0 left-0 right-0">
                     <svg className="w-full h-16 sm:h-24" viewBox="0 0 1200 120" preserveAspectRatio="none">
                         <path
@@ -196,7 +195,6 @@ export default function Food() {
                 </div>
             </section>
 
-            {/* Products Section */}
             <section id="products" className="py-8 px-4">
                 <motion.div
                     initial={{ opacity: 0 }}
@@ -279,7 +277,6 @@ export default function Food() {
                 </motion.div>
             </section>
 
-            {/* About Section */}
             <section id="about" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8 bg-white">
                 <div className="max-w-4xl mx-auto text-center">
                     <motion.div
@@ -302,7 +299,6 @@ export default function Food() {
                 </div>
             </section>
 
-            {/* Contact Section */}
             <section id="contact" className="py-12 sm:py-16 px-4 sm:px-6 lg:px-8">
                 <div className="max-w-4xl mx-auto text-center">
                     <motion.div
