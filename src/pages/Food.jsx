@@ -291,9 +291,9 @@ export default function Food() {
                             Tentang Kami
                         </h2>
                         <p className="text-lg text-gray-700 leading-relaxed mb-6">
-                            Kewirausahaan Rohis adalah inisiatif dari organisasi Rohis sekolah yang bertujuan untuk
+                            Kewirausahaan Rohis adalah kegiatan dari organisasi Rohis sekolah yang bertujuan untuk
                             mengembangkan jiwa kewirausahaan. Kami menyediakan makanan dan
-                            minuman halal berkualitas untuk mendukung kegiatan sekolah dan komunitas.
+                            minuman halal berkualitas untuk mendukung kegiatan kami sendiri.
                         </p>
                         <p className="text-lg text-gray-700 leading-relaxed">
                             Setiap pembelian Anda membantu mendukung kegiatan Rohis.
