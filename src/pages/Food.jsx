@@ -127,7 +127,7 @@ export default function Food() {
                             }}
                         />
                     ))}
-                </div>  
+                </div>
                 <motion.div
                     className="absolute top-50 right-23 md:top-8 md:left-245 -rotate-48 md:-rotate-48  text-4xl md:text-6xl"
                     initial={{ opacity: 0, scale: 0.8 }}

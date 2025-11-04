@@ -9,6 +9,7 @@ export default function FoodDetail() {
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState(true);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     const url = "https://docs.google.com/spreadsheets/d/1UInGlaN35dfSFGEwD3d5KC0eJmbFyMXXRbzpmXuflbw/gviz/tq?tqx=out:json";
@@ -42,6 +43,38 @@ export default function FoodDetail() {
       });
   }, [id]);
 
+  // Get all available images for the product
+  const getProductImages = () => {
+    if (!product) return [];
+    
+    const images = [];
+    if (product.image_url) images.push(product.image_url);
+    if (product.image_url_2) images.push(product.image_url_2);
+    if (product.image_url_3) images.push(product.image_url_3);
+    
+    return images.length > 0 ? images : [
+      `https://via.placeholder.com/600x600/4ADE80/FFFFFF?text=${encodeURIComponent(product.name)}`
+    ];
+  };
+
+  const productImages = getProductImages();
+
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === productImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) => 
+      prevIndex === 0 ? productImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToImage = (index) => {
+    setCurrentImageIndex(index);
+  };
+
   const formatPrice = (price) => {
     if (!price) return 0;
 
@@ -65,7 +98,7 @@ export default function FoodDetail() {
     const productPrice = formatPrice(product.price);
     const totalPrice = productPrice * quantity;
 
-    const message = `Assalamu'alaikum, saya \n nama:\nkelas:\n\n ingin memesan:\n\n🍗 *${product.name}*\n💰 Harga: ${displayPrice(product.price)}\n📦 Jumlah: ${quantity}\n💵 Total: Rp ${totalPrice.toLocaleString('id-ID')}\n\nTerima kasih!`;
+    const message = `Assalamu'alaikum, saya \nnama:\nkelas:\n\n ingin memesan:\n\n🍗 *${product.name}*\n💰 Harga: ${displayPrice(product.price)}\n📦 Jumlah: ${quantity}\n💵 Total: Rp ${totalPrice.toLocaleString('id-ID')}\n\nTerima kasih!`;
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/6285814567851?text=${encodedMessage}`;
@@ -167,28 +200,127 @@ export default function FoodDetail() {
           className="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl overflow-hidden max-w-6xl mx-auto border border-white/50"
         >
           <div className="lg:flex">
-            <div className="lg:w-130 lg:h-150 relative">
-              <img
-                src={product.image_url}
-                alt={product.name}
-                className="w-full h-80 lg:h-full object-cover"
-                onError={(e) => {
-                  e.target.src = `https://via.placeholder.com/600x600/4ADE80/FFFFFF?text=${encodeURIComponent(product.name)}`;
-                }}
-              />
+            {/* Image Gallery Section */}
+            <div className="lg:w-1/2 relative">
+              <div className="relative lg:h-150 h-80 overflow-hidden">
+                {/* Main Image */}
+                <motion.div
+                  key={currentImageIndex}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="w-full h-full"
+                >
+                  <img
+                    src={productImages[currentImageIndex]}
+                    alt={`${product.name} - Gambar ${currentImageIndex + 1}`}
+                    className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.target.src = `https://via.placeholder.com/600x600/4ADE80/FFFFFF?text=${encodeURIComponent(product.name)}`;
+                    }}
+                  />
+                </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 }}
-                className="absolute top-4 left-4"
-              >
-                <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
-                  {product.category || 'Makanan'}
-                </span>
-              </motion.div>
+                {/* Navigation Arrows - Show only if multiple images */}
+                {productImages.length > 1 && (
+                  <>
+                    {/* Left Arrow */}
+                    <motion.button
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={prevImage}
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-green-200 text-green-700 hover:bg-white hover:text-green-800 transition-all duration-200"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </motion.button>
+
+                    {/* Right Arrow */}
+                    <motion.button
+                      initial={{ opacity: 0, x: 10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={nextImage}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 bg-white/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-lg border border-green-200 text-green-700 hover:bg-white hover:text-green-800 transition-all duration-200"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </motion.button>
+                  </>
+                )}
+
+                {/* Image Indicators/Dots */}
+                {productImages.length > 1 && (
+                  <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    {productImages.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => goToImage(index)}
+                        className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                          index === currentImageIndex 
+                            ? 'bg-white scale-125' 
+                            : 'bg-white/50 hover:bg-white/80'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                {/* Image Counter */}
+                {productImages.length > 1 && (
+                  <div className="absolute top-4 right-4 bg-black/50 text-white px-3 py-1 rounded-full text-sm backdrop-blur-sm">
+                    {currentImageIndex + 1} / {productImages.length}
+                  </div>
+                )}
+
+                {/* Category Badge */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="absolute top-4 left-4"
+                >
+                  <span className="bg-gradient-to-r from-green-500 to-emerald-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
+                    {product.category || 'Makanan'}
+                  </span>
+                </motion.div>
+              </div>
+
+              {/* Thumbnail Gallery - Show only if multiple images */}
+              {productImages.length > 1 && (
+                <div className="hidden lg:flex p-4 space-x-2 justify-center bg-green-50/50">
+                  {productImages.map((image, index) => (
+                    <motion.button
+                      key={index}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => goToImage(index)}
+                      className={`w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                        index === currentImageIndex 
+                          ? 'border-green-500 scale-105' 
+                          : 'border-transparent hover:border-green-300'
+                      }`}
+                    >
+                      <img
+                        src={image}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.src = `https://via.placeholder.com/100x100/4ADE80/FFFFFF?text=${encodeURIComponent(product.name)}`;
+                        }}
+                      />
+                    </motion.button>
+                  ))}
+                </div>
+              )}
             </div>
 
+            {/* Product Details Section */}
             <div className="lg:w-1/2 p-8 lg:p-10">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
