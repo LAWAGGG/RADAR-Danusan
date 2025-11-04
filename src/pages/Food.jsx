@@ -237,7 +237,8 @@ export default function Food() {
                                     {category === "Semua" ? "🍽️ Semua Menu" :
                                         category === "makanan" ? "🍚 Makanan" :
                                             category === "snack berat" ? "🍱 Snack Berat" :
-                                                category === "snack ringan" ? "🍪 Snack Ringan" : category}
+                                                category === "minuman" ? "🍺 Minuman" :
+                                                    category === "snack ringan" ? "🍪 Snack Ringan" : category}
                                 </motion.button>
                             ))}
                         </motion.div>
